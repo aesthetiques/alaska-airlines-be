@@ -1,56 +1,62 @@
 'use strict'
 
-const mongoose = require('mongooose')
-const Schema = mongoose.Schema
 const debug = require('debug')('aa-dev:location-controller')
-const Promise = require('bluebird')
-const createError = require('http-errors')
+import Promise from 'bluebird'
+import mongoose from 'mongoose'
+import createError from 'http-errors'
+
+const Schema = mongoose.Schema
 
 const locationSchema = Schema({
+  abbr: {type: String, required: true, unique: true},
   location: {type: String, required: true, unique: true},
   flightsOut: [{type: Schema.Types.ObjectId, ref: 'flight'}],
 })
 
-locationSchema.createLocation = newDestination => {
-  debug('#createLocation')
-  if (!newDestination.location) 
-    return Promise.reject(createError(400, 'no location included'))
+const Location = mongoose.model('location', locationSchema)
 
-  return new Location(newDestination)
-    .save()
-    .then(newLocation => newLocation)
+Location.createLocation = function(newDestination){
+  debug('#createLocation')
+  if(!newDestination) return Promise.reject(createError(400, 'no location included'))
+
+  return new Location(newDestination).save()
+    .then(newLocation => Promise.resolve(newLocation))
     .catch(err => Promise.reject(createError(400, err.message)))
 }
 
-locationSchema.fetchAll = () => {
+Location.fetchAll = function(){
   debug('#fetchAll')
 
-  return Location
-    .find()
+  return Location.find()
     .then(location => Promise.resolve(location))
     .catch(err => Promise.reject(createError(400, err.message)))
 }
 
-locationSchema.fetchOne = locationId => {
+Location.fetchOne = function(locationId){
   debug('#fetchOne')
-  if (!locationId) 
-    return Promise.reject(createError(400, 'No location included'))
+  if (!locationId) return Promise.reject(createError(400, 'No location id included'))
 
-  return Location
-    .findOne(locationId)
+  return Location.findById(locationId)
     .then(location => Promise.resolve(location))
     .catch(err => Promise.reject(createError(404, err.message)))
 }
 
-locationSchema.deleteLocataion = locationId => {
-  debug('#deleteLocation')
-  if (!locationId) 
-    return Promise.reject(createError(400, 'No location included'))
+Location.updateLocation = function(locationId, location){
+  debug('#updateOne')
+  if(!locationId) return Promise.reject(createError(400, 'No location id included'))
+  if(!location) return Promise.reject(createError(400, 'No location object included'))
 
-  return Location
-    .findByIdAndRemove(locationId)
+  return Location.findByIdAndUpdate
+
+}
+
+Location.deleteLocation = function(locationId){
+  debug('#deleteLocation')
+  if (!locationId) return Promise.reject(createError(400, 'No location included'))
+
+  return Location.findByIdAndRemove(locationId)
     .then(location => promise.resolve(location))
     .catch(err => Promise.reject(createError(404, err.message)))
 }
 
-module.exports = mongoose.model('location', locationSchema)
+export default Location

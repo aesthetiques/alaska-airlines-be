@@ -10,6 +10,4 @@ const ticketSchema = Schema({
   ticketPrice: {type: Number, required: true},
 })
 
-
-
 module.exports = mongoose.model('ticket', ticketSchema)
