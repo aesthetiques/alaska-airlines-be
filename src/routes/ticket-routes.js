@@ -19,5 +19,21 @@ module.exports = function(router){
       .catch(err => res.send(err))
   })
 
+  router.put('/ticket/sell/:ticketId', (req, res) => {
+    debug('#PUT /ticket/update/:ticketId')
+
+    Ticket.sell(req.params.ticketId)
+      .then(ticket => res.json(ticket))
+      .catch(err => res.send(err))
+  })
+
+  router.put('/ticket/update/:ticketId', (req, res) => {
+    debug('#PUT /ticket/reset/:ticketId')
+
+    Ticket.update(req.params.ticketId, req.body)
+      .then(ticket => res.json(req.body))
+      .catch(err => res.status(err.status).send(err))
+  })
+
   return router
 }

@@ -48,7 +48,7 @@ Location.updateLocation = function(locationId, newData){
 
   return Location.findByIdAndUpdate(locationId, newData)
     .then(location => Promise.resolve(location))
-    .catch(err => Promise.reject(createError(400, 'Improper location formatting')))
+    .catch(err => Promise.reject(createError(404, 'No location found')))
 }
 
 Location.deleteLocation = function(locationId){
