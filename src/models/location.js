@@ -15,17 +15,17 @@ const locationSchema = Schema({
 
 const Location = mongoose.model('location', locationSchema)
 
-Location.createLocation = function(newDestination){
-  debug('#createLocation')
-  if(!newDestination) return Promise.reject(createError(400, 'no location included'))
+Location.createLocation = function(locationData){
+  debug('Location #createLocation')
+  if(!locationData) return Promise.reject(createError(400, 'no location included'))
 
-  return new Location(newDestination).save()
+  return new Location(locationData).save()
     .then(newLocation => Promise.resolve(newLocation))
     .catch(err => Promise.reject(createError(400, err.message)))
 }
 
 Location.fetchAll = function(){
-  debug('#fetchAll')
+  debug('Location #fetchAll')
 
   return Location.find()
     .then(location => Promise.resolve(location))
@@ -33,7 +33,7 @@ Location.fetchAll = function(){
 }
 
 Location.fetchOne = function(locationId){
-  debug('#fetchOne')
+  debug('Location #fetchOne')
   if (!locationId) return Promise.reject(createError(400, 'No location id included'))
 
   return Location.findById(locationId)
@@ -41,21 +41,22 @@ Location.fetchOne = function(locationId){
     .catch(err => Promise.reject(createError(404, err.message)))
 }
 
-Location.updateLocation = function(locationId, location){
-  debug('#updateOne')
+Location.updateLocation = function(locationId, newData){
+  debug('Location #updateOne')
   if(!locationId) return Promise.reject(createError(400, 'No location id included'))
-  if(!location) return Promise.reject(createError(400, 'No location object included'))
+  if(!newData) return Promise.reject(createError(400, 'No location object included'))
 
-  return Location.findByIdAndUpdate
-
+  return Location.findByIdAndUpdate(locationId, newData)
+    .then(location => Promise.resolve(location))
+    .catch(err => Promise.reject(createError(400, 'Improper location formatting')))
 }
 
 Location.deleteLocation = function(locationId){
-  debug('#deleteLocation')
+  debug('Location #deleteLocation')
   if (!locationId) return Promise.reject(createError(400, 'No location included'))
 
   return Location.findByIdAndRemove(locationId)
-    .then(location => promise.resolve(location))
+    .then(location => Promise.resolve(location))
     .catch(err => Promise.reject(createError(404, err.message)))
 }
 

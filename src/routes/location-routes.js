@@ -2,13 +2,14 @@
 
 import express from 'express'
 import Location from '../models/location.js'
+
 const debug = require('debug')('aa-location-routes')
 // import bearerAuth from '../lib/bearer-auth-middleware'
 
 module.exports = function(router){
 
   router.post('/location/new', (req, res) => {
-    debug('#Post /newlocation')
+    debug('#Post /location/new')
     
     Location.createLocation(req.body)
       .then(location => res.json(location))
@@ -20,7 +21,7 @@ module.exports = function(router){
 
     Location.fetchAll()
       .then(location => res.json(location))
-      .catch(err => res.status(err.stats).send(err))
+      .catch(err => res.status(err.status).send(err))
   })
 
   router.get('/location/:locationId', (req, res) => {
@@ -35,14 +36,14 @@ module.exports = function(router){
     debug('#PUT /updatelocation/locationId')
 
     Location.updateLocation(req.params.locationId, req.body)
-      .then(location => res.json(location))
+      .then(location => res.json(req.body))
       .catch(err => res.status(err.status).send(err.message))
   })
 
   router.delete('/location/delete/:locationId', (req, res) => {
     debug('#Delete /removelocation/:locationId')
 
-    Location.deleteLocation(req.params.locations)
+    Location.deleteLocation(req.params.locationId)
       .then(location => res.json(location))
       .catch(err => res.status(err.status).send(err))
   })

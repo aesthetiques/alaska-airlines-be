@@ -1,11 +1,21 @@
 {
-  "name": "back-end",
+  "name": "aa-backend",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/aesthetiques/alaska-airlines-be.git",
   "author": "Caleb Wells<caleb.wells1@gmail.com>",
   "license": "MIT",
+  "jest": {
+    "setupFiles": [
+      "<rootDir>/__tests__/lib/.test.env"
+    ],
+    "testMatch": [
+      "<rootDir>/__tests__/test-**/**.js"
+    ]
+  },
   "scripts": {
+    "test": "jest --runInBand",
+    "test-watch": "jest --runInBand --watchAll",
     "watch": "DEBUG=aa-dev nodemon index.js"
   },
   "dependencies": {
@@ -24,6 +34,7 @@
     "debug": "^3.1.0",
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
+    "fs-extra": "^4.0.2",
     "http-errors": "^1.6.2",
     "jsonwebtoken": "^8.1.0",
     "mongoose": "^4.12.3",
@@ -31,11 +42,12 @@
     "superagent": "^3.7.0"
   },
   "devDependencies": {
+    "babel-jest": "^21.2.0",
     "chai": "^4.1.2",
     "coveralls": "^3.0.0",
     "eslint": "^4.9.0",
+    "faker": "^4.1.0",
     "istanbul": "^0.4.5",
-    "mocha": "^4.0.1",
-    "mocha-lcov-reporter": "^1.3.0"
+    "jest": "^21.2.1"
   }
 }

@@ -11,9 +11,8 @@ const app = express()
 const router = express.Router()
 
 //Routes:
-// import flightRoutes from '../routes/flight-routes'
-// import ticketRoutes from '../routes/ticket-routes'
-// import landingRoutes from '../routes/landing-routes'
+import flightRoutes from '../routes/flight-routes'
+import ticketRoutes from '../routes/ticket-routes'
 import locationRoutes from '../routes/location-routes'
 
 //.env variables:
@@ -30,13 +29,18 @@ app.use(
   cors()
 )
 
-// app.use('/api', flightRoutes(router))
-// app.use('/api', ticketRoutes(router))
-// app.use('api', landingRoutes(router))
 app.use('/api', locationRoutes(router))
+app.use('/api', flightRoutes(router))
+app.use('/api', ticketRoutes(router))
 
 export const start = () => {
   app.listen(PORT, () =>{
     console.log(`Listening on port: ${PORT}; Version: ${VER}, MONGODB_URI: ${MONGODB_URI}`)
+  })
+}
+
+export const close = () => {
+  app.close(PORT, () => {
+    console.log(`Closed APP on PORT: ${PORT}`)
   })
 }
