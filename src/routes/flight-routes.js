@@ -6,7 +6,7 @@ import Flight from '../models/flight.js'
 const debug = require('debug')('aa-flight-routes')
 
 module.exports = function(router){
-
+  //Admin Routes
   router.post('/flight/new/:locationId', (req, res) => {
     debug('#POST /flight/new/:locationId')
 
@@ -15,6 +15,24 @@ module.exports = function(router){
       .then(flight => res.json(flight))
       .catch(err => res.status(err.status).send(err))
   })
+
+  router.delete('/flight/delete/:flightId', (req, res) => {
+    debug('#Delete /flight/delete/:flightId')
+
+    Flight.delete(req.params.flightId)
+      .then(flight => res.json(flight))
+      .catch(err => res.status(err.status).send(err))      
+  })
+
+  //User Route
+  router.get('/flightplan/:departureCode/:destinationCode', (req, res) => {
+    debug('#GET /flightplan/:departureCode/:destinationCode')
+
+    Flight.flightPlan(req.params.departureCode, req.params.destinationCode)
+      .then(flights => res.json(flights))
+      .catch(err => res.status(err.status).send(err))    
+  })
+
 
   router.get('/flights', (req, res) => {
     debug('#GET /flights')
@@ -30,14 +48,6 @@ module.exports = function(router){
     Flight.fetchOne(req.params.flightId)
       .then(flight => res.json(flight))
       .catch(err => res.status(err.status).send(err))
-  })
-
-  router.delete('/flight/delete/:flightId', (req, res) => {
-    debug('#Delete /flight/delete/:flightId')
-
-    Flight.delete(req.params.flightId)
-      .then(flight => res.json(flight))
-      .catch(err => res.status(err.status).send(err))      
   })
 
   return router
