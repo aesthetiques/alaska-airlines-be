@@ -16,10 +16,12 @@ const flightSchema = Schema({
   departureTime: {type: String, required: true},
   departureCode: {type: String, required: true},
   destinationCode: {type: String, required: true},
+  firstClassPrice: {type: Number, required: true},
+  firstClassCount: {type: Number, required: true},
   departureMilitary: {type: Number, required: true},
+  standardClassCount: {type: Number, required: true},
+  standardClassPrice: {type: Number, required: true},
   locationId: {type: Schema.Types.ObjectId, ref: 'location'},
-  firstClass: [{type: Schema.Types.ObjectId, ref: 'ticket'}],
-  standardClass: [{type: Schema.Types.ObjectId, ref: 'ticket'}],
 })
 
 const Flight = mongoose.model('flight', flightSchema)
@@ -46,7 +48,7 @@ Flight.fetchOne = function(flightId){
   debug('Flight #fetchOne')
   if(!flightId) Promise.reject(createError(400, 'No flightId included'))
 
-  return Flight.findById(flightId)
+  return Flight.findById(flightId).populate('firstClass standardClass')
     .then(flight => Promise.resolve(flight))
     .catch(err => Promise.reject(createError(404, err.message)))
 }
@@ -67,7 +69,7 @@ Flight.flightPlan = function(departureCode, destinationCode){
   return Location.findOne({ abbr: departureCode })
     .populate({
       path: 'flightsOut',
-      match: { destinationCode: { $eq: destinationCode }}
+      match: { destinationCode: { $eq: destinationCode }},
     })
     .exec()
     .then(flights => Promise.resolve(flights))
