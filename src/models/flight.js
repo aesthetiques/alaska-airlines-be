@@ -9,9 +9,11 @@ import createError from 'http-errors'
 const Schema = mongoose.Schema
 
 const flightSchema = Schema({
-  arrival: {type: String, required: true},
   flightNum: {type: Number, required: true},
   departure: {type: String, required: true},
+  destination: {type: String, required: true},
+  arrivalTime: {type: String, required: true},
+  departureTime: {type: String, required: true},
   departureCode: {type: String, required: true},
   destinationCode: {type: String, required: true},
   departureMilitary: {type: Number, required: true},
