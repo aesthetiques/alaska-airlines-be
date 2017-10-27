@@ -1,6 +1,6 @@
 # Alaska Airlines API
 
-###Setup:
+### Setup:
 * Clone repo into local folder.
 
 * Run `yarn install` or `npm i` in terminal to install required packages.
