@@ -25,7 +25,6 @@ mongoose.connect(MONGODB_URI)
 
 app.use(
   bodyParser.json(),
-  // errorHandler,
   cors()
 )
 

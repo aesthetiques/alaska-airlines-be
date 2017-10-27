@@ -4,7 +4,6 @@ import express from 'express'
 import Location from '../models/location.js'
 
 const debug = require('debug')('aa-location-routes')
-// import bearerAuth from '../lib/bearer-auth-middleware'
 
 module.exports = function(router){
 
